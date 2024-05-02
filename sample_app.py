@@ -371,7 +371,7 @@ def streamlit_app():
     mid_close_price = px.line(data, x=data.index,
                               y='close_mid_price', title='Mid Close Price')
     mid_close_price.update_xaxes(title_text='Time (min)')
-    mid_close_price.update_yaxes(title_text='Mic_Close_Price')
+    mid_close_price.update_yaxes(title_text='Mid_Close_Price')
     st.plotly_chart(mid_close_price, use_container_width=True)
 
     # Plot returns distribution and returns trend side by side
