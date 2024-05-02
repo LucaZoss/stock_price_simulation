@@ -1,5 +1,10 @@
 ## Algorithmic Trading: Simulating Stock Prices (Direct vs. Inverse Transform)
 
+Check the apps:
+![url]https://stock-price-simulator.streamlit.app/
+![url]https://appl-sim-mcc.streamlit.app/
+
+
 This repository explores the simulation of stock prices using two sampling techniques: Direct Sampling and Inverse Transform Sampling. It investigates the limitations of these methods in capturing the complexities of real-world financial data.
 
 **Key Findings:**
