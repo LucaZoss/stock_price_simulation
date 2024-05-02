@@ -3,6 +3,7 @@
 Check the apps:
 
 https://stock-price-simulator.streamlit.app/
+
 https://appl-sim-mcc.streamlit.app/
 
 
