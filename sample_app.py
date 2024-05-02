@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from scipy.stats import norm, shapiro
+from scipy.interpolate import interp1d
 import plotly.graph_objects as go
 import plotly.express as px
 
@@ -164,6 +165,35 @@ def inverse_transform_sampling(sample_size: 390, estimation_func, price_data):
 
     return sample_gaussian_returns_inv, sim_prices
 
+
+def inverse_transform_sampling_v2(sample_size: 390, estimation_func, price_data):
+    mean_returns, std_returns = estimation_func(price_data)
+    returns = price_data['returns'].dropna()
+
+    data_sorted = np.sort(returns)
+    probs = np.linspace(1./len(returns), 1, len(returns))  # computing cdf
+
+    inverse_cdf_function = interp1d(
+        probs, data_sorted, bounds_error=False, fill_value="extrapolate")
+
+    # we generate the samples from the uniform distribution
+    uniform_samples = np.random.uniform(0, 1, sample_size)
+
+    # Sample data from the inverse cdf
+    returns_sampled_inv_trans_dist = inverse_cdf_function(uniform_samples)
+
+    start_price = price_data['close_mid_price'].iloc[-1]
+
+    sim_prices = [start_price]
+
+    for r in returns_sampled_inv_trans_dist:
+        # calculate the new price based on the previous price
+        new_price = sim_prices[-1] * (1 + r)
+        # append to the list
+        sim_prices.append(new_price)
+
+    return returns_sampled_inv_trans_dist, sim_prices
+
 # Ploting Sample
 
 
@@ -224,10 +254,10 @@ def plot_stack_histograms_sample_vs_original(data, sample_gaussian_returns):
 
 
 # Plot CDF for Inverse Transform Sampling
-def plot_cdf(data, sample_gaussian_returns):
+def plot_cdf(data, returns_sampled_inv_trans_dist):  # sample_gaussian_returns
     fig = go.Figure()
     sorted_returns = np.sort(data['returns'].dropna())
-    sorted_samples = np.sort(sample_gaussian_returns)
+    sorted_samples = np.sort(returns_sampled_inv_trans_dist)
 
     # Create traces for CDF of original and sampled data
     fig.add_trace(go.Scatter(x=sorted_returns, y=np.linspace(
@@ -287,7 +317,7 @@ def streamlit_app():
             sample_gaussian_returns, sim_prices = direct_sampling(
                 sample_size, estimation_func, data)
         elif sampling_method == "Inverse Transform Sampling":
-            sample_gaussian_returns, sim_prices = inverse_transform_sampling(
+            sample_gaussian_returns, sim_prices = inverse_transform_sampling_v2(
                 sample_size, estimation_func, data)
 
     # Main Page
