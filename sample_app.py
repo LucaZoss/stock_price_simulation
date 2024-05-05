@@ -125,7 +125,7 @@ def direct_sampling(sample_size: 390, estimation_func, price_data):
 
     # Simulate Stock Price trajectory
     # Start from the last price in the lob dataset
-    start_price = price_data['close_mid_price'].iloc[-1]
+    start_price = price_data['close_mid_price'].iloc[0]  # -1
 
     # Initialize the simulated price list
     sim_prices = [start_price]
@@ -152,7 +152,7 @@ def inverse_transform_sampling(sample_size: 390, estimation_func, price_data):
 
     # Simulate Stock Price trajectory
     # Start from the last price in the lob dataset
-    start_price = price_data['close_mid_price'].iloc[-1]
+    start_price = price_data['close_mid_price'].iloc[0]  # -1
 
     # Initialize the simulated price list
     sim_prices = [start_price]
@@ -182,7 +182,7 @@ def inverse_transform_sampling_v2(sample_size: 390, estimation_func, price_data)
     # Sample data from the inverse cdf
     returns_sampled_inv_trans_dist = inverse_cdf_function(uniform_samples)
 
-    start_price = price_data['close_mid_price'].iloc[-1]
+    start_price = price_data['close_mid_price'].iloc[0]  # -1
 
     sim_prices = [start_price]
 

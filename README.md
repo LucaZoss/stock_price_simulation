@@ -31,7 +31,7 @@ This repository explores the simulation of stock prices using two sampling techn
 **Running the Streamlit Applications:**
 
 1. **Prerequisites:** Ensure you have Python 3.9, Streamlit (`pip install streamlit`), and any other necessary libraries installed (list dependencies in a separate file, e.g., `requirements.txt`).
-2. **Clone the Repository:** Use `git clone https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/GitHub-URL-find-use-example` to clone this repository.
+2. **Clone the Repository:** 
 3. **Navigate to the Directory:** Run `cd Algorithmic-Trading-Simulations` (or your repository name) in your terminal.
 4. **Run the First Streamlit App:** Execute `streamlit run streamlit_apps/interactive_sampling.py` to launch the interactive sampling app.
 5. **Run the Second Streamlit App:** Execute `streamlit run streamlit_apps/monte_carlo_simulation.py` to launch the Monte Carlo simulation app.
