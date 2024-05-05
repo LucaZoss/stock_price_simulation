@@ -449,12 +449,23 @@ def plot_monte_carlo(paths, title):
 def plot_monte_carlo_distribution(sim_returns, title):
     """Plot the distribution of monte carlo"""
     fig = go.Figure()
+
     for path in sim_returns:
-        fig.add_trace(go.Histogram(x=path, histnorm='probability density',
+        # Calculate returns from prices
+        returns = (np.array(path[1:]) -
+                   np.array(path[:-1])) / np.array(path[:-1])
+        fig.add_trace(go.Histogram(x=returns, histnorm='probability density',
                                    showlegend=False, opacity=0.5, nbinsx=50))
-    fig.update_layout(title=title, xaxis_title='Price',
+    fig.update_layout(title=title, xaxis_title='Return',  # Return
                       yaxis_title='Probability Density', template='plotly_white')
     return fig
+
+    # for path in sim_returns:
+    #     fig.add_trace(go.Histogram(x=path, histnorm='probability density',
+    #                                showlegend=False, opacity=0.5, nbinsx=50))
+    # fig.update_layout(title=title, xaxis_title='Price',  # Price
+    #                   yaxis_title='Probability Density', template='plotly_white')
+    # return fig
 
 
 def streamlit_app_page2(data):
@@ -472,7 +483,7 @@ def streamlit_app_page2(data):
         fig_direct = plot_monte_carlo(
             paths_direct, "Monte Carlo Simulation using Direct Sampling")
         dist_direct = plot_monte_carlo_distribution(
-            paths_direct, "Distribution of Final Prices (Direct Sampling)")
+            paths_direct, "Distribution of Returns (Direct Sampling)")
         progress_bar.progress(50)
 
         status_text.text(
@@ -482,7 +493,7 @@ def streamlit_app_page2(data):
         fig_inverse = plot_monte_carlo(
             paths_inverse, "Monte Carlo Simulation using Inverse Transform Sampling")
         dist_inverse = plot_monte_carlo_distribution(
-            paths_inverse, "Distribution of Final Prices (Inverse Transform Sampling)")
+            paths_inverse, "Distribution of Returns (Inverse Transform Sampling)")
         progress_bar.progress(100)
 
         # Clear status text and progress bar after completion
