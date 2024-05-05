@@ -340,6 +340,7 @@ def streamlit_app():
         std_original = data['returns'].std()
         st.write("Mean:", mean_original)
         st.write("Standard Deviation:", std_original)
+        st.write("Excess Kurtosis:", data['returns'].kurtosis())
     with col2:
         if 'sample_gaussian_returns' in locals():
             st.write("Sampled Returns:")
@@ -347,6 +348,8 @@ def streamlit_app():
             std_sampled = np.std(sample_gaussian_returns)
             st.write("Mean:", mean_sampled)
             st.write("Standard Deviation:", std_sampled)
+            st.write("Excess Kurtosis:", pd.Series(
+                sample_gaussian_returns).kurtosis())
 
     # Display the stack histograms of the returns
     if 'sample_gaussian_returns' in locals():

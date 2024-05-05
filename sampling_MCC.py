@@ -340,6 +340,7 @@ def streamlit_app():
         std_original = data['returns'].std()
         st.write("Mean:", mean_original)
         st.write("Standard Deviation:", std_original)
+        st.write("Excess Kurtosis:", data['returns'].kurtosis())
     with col2:
         if 'sample_gaussian_returns' in locals():
             st.write("Sampled Returns:")
@@ -347,6 +348,8 @@ def streamlit_app():
             std_sampled = np.std(sample_gaussian_returns)
             st.write("Mean:", mean_sampled)
             st.write("Standard Deviation:", std_sampled)
+            st.write("Excess Kurtosis:", pd.Series(
+                sample_gaussian_returns).kurtosis())
 
     # Display the stack histograms of the returns
     if 'sample_gaussian_returns' in locals():
@@ -510,19 +513,33 @@ def streamlit_app_page2(data):
 
         # Add average price and standard deviation
         st.write("Average Price and Standard Deviation")
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
         with col1:
-            st.write("Direct Sampling:")
-            average_price_direct = np.mean(paths_direct, axis=0)
-            std_price_direct = np.std(paths_direct, axis=0)
-            st.write("Average Price:", average_price_direct[-1])
-            st.write("Standard Deviation:", std_price_direct[-1])
+            st.write("Original Data:")
+            st.write("Average returns:", data['returns'].iloc[0])
+            st.write("Standard Deviation:", data['returns'].std())
+
         with col2:
+            st.write("Direct Sampling:")
+            returns_direct = np.diff(
+                paths_direct, axis=1) / paths_direct[:, :-1]
+            average_returns_direct = np.mean(returns_direct, axis=0)
+            stdev_returns_direct = np.std(returns_direct, axis=0)
+            st.write("Average Returns:", average_returns_direct[-1])
+            st.write("Standard Deviation Returns:", stdev_returns_direct[-1])
+            st.write("Excess Kurtosis:", pd.Series(
+                returns_direct).kurtosis())
+        with col3:
             st.write("Inverse Transform Sampling:")
-            average_price_inverse = np.mean(paths_inverse, axis=0)
+            returns_inverse = np.diff(
+                paths_inverse, axis=1) / paths_inverse[:, :-1]
+            average_returns_inverse = np.mean(returns_inverse, axis=0)
+            stdev_returns_inverse = np.std(returns_inverse, axis=0)
             std_price_inverse = np.std(paths_inverse, axis=0)
-            st.write("Average Price:", average_price_inverse[-1])
-            st.write("Standard Deviation:", std_price_inverse[-1])
+            st.write("Average Returns:", average_returns_inverse[-1])
+            st.write("Standard Deviation Returns:", stdev_returns_inverse[-1])
+            st.write("Excess Kurtosis:", pd.Series(
+                returns_inverse).kurtosis())
 
 
 def main_app():
